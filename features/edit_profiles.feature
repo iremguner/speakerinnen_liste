@@ -7,6 +7,7 @@ And you are signed in as admin
 When you click on: Admin
 And you click on: Profile
 And you click on: Bearbeiten in list line Factory Girl
+And you are able to see: Deine Themen als Tags
 And you start typing "<input>" in autocomplete field
 Then you see a box with autocompletion suggestions: <suggestions>
 

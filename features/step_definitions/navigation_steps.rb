@@ -42,11 +42,13 @@ end
 When /^you click on(.*): (.+)$/ do |type, label|
   if label.include?('in list line')
     parts = label.split('in list line')
+    expect(page).to have_content(parts[0].strip)
     xpath = '//tr[*//*[contains(text(), ":match1")]]//*[contains(text(), ":match2")]'
     xpath.gsub!(':match1',parts[1].strip).gsub!(':match2',parts[0].strip)
     element = page.all(:xpath,xpath).first
     element.click
   else
+    expect(page).to have_content(label)    
     case type.strip
       when 'button' then click_button label
       when 'link' then click_link label
