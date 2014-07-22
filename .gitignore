@@ -27,3 +27,6 @@
 
 # Ignore database files
 *.dump
+
+# Ignore coverage results
+coverage
