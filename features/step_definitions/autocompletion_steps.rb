@@ -20,8 +20,12 @@
 
 When /^you start typing "(.+)" in autocomplete field$/ do |input|
   #scenarios which use this step definition have to be tagged with @javascript
-  field = page.all(:xpath, '//ul[contains(@class,"tagit")]//li[contains(@class,"tagit-new")]/input[contains(@class,"ui-autocomplete-input")]').first
-  field.set(input)
+  #field = page.all(:xpath, '//ul[contains(@class,"tagit")]//li[contains(@class,"tagit-new")]/input[contains(@class,"ui-autocomplete-input")]').first
+  #field.set(input)
+  # covered this step by a helper method executing a js script
+  # to achieve the same result indifferent from the browser i.e. webdriver
+  # that way it works both in poltergeist as in webkit
+  fill_in_autocomplete('.ui-autocomplete-input',input)
 end
 
 ###########
