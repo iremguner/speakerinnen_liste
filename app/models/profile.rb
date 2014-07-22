@@ -20,18 +20,17 @@ class Profile < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
-  attr_accessible :bio, :city, :email, :firstname, :languages, :lastname, :picture, :twitter, :remove_picture, :talks, :website
-  attr_accessible :content, :name, :topic_list, :media_url, :medialinks, :main_topic
-  attr_accessible :translations_attributes
+  attr_accessible :bio, :city, :firstname, :languages, :lastname
+  attr_accessible :picture, :twitter, :remove_picture, :website
+  attr_accessible :topic_list, :medialinks, :main_topic
+  #attr_accessible :translations_attributes, :name, :content, :media_url, :talks
   attr_accessible :admin_comment
 
   acts_as_taggable_on :topics
 
   has_many :medialinks
 
-  before_save(on: [:create, :update]) do
-    self.twitter.gsub!(/^@|https:|http:|:|\/\/|www.|twitter.com\//, '') if twitter
-  end
+  before_validation { twitter_name_formatted }
 
   def after_confirmation
     AdminMailer.new_profile_confirmed(self).deliver
@@ -61,7 +60,7 @@ class Profile < ActiveRecord::Base
   scope :no_admin, where(admin: false)
 
   def fullname
-    "#{firstname} #{lastname}".strip
+    "#{firstname.strip} #{lastname.strip}".strip
   end
 
   def main_topic_or_first_topic
@@ -89,11 +88,11 @@ class Profile < ActiveRecord::Base
   end
 
   def twitter_name_formatted
-    twitter.gsub(/^@|https:|http:|:|\/\/|www.|twitter.com\//, '')
+    twitter.gsub!(/^@|https:|http:|:|\/\/|www.|twitter.com\//, '') if twitter
   end
 
   def twitter_link_formatted
-    "http://twitter.com/"  + twitter.gsub(/^@|https:|http:|:|\/\/|www.|twitter.com\//, '')
+    "http://twitter.com/"  + twitter
   end
 
   def self.random
