@@ -93,6 +93,7 @@ describe Profile do
     it "is correctly removed" do
       expect(@user).to be_valid
       expect(@user.twitter).to eq 'tweeter'
+      expect(@user.twitter_link_formatted).to eq 'http://twitter.com/tweeter'
     end
   end
 end
