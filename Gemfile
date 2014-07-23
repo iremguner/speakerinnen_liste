@@ -5,6 +5,7 @@ gem 'rails', '3.2.16'
 gem 'bootstrap-sass', '~> 2.3.0'
 gem 'normalize-rails'
 gem 'bootswatch-rails'
+# fake data generator - should that one be available in production?
 gem 'faker', '1.0.1'
 
 gem 'deadweight', require: 'deadweight/hijack/rails'
@@ -12,22 +13,38 @@ gem 'deadweight', require: 'deadweight/hijack/rails'
 # Bundle edge Rails instead:
 # gem 'rails', git: 'git://github.com/rails/rails.git'
 
+# paginator
 gem 'kaminari'
 
+# database
 gem 'pg'
+
+# authentication
 gem 'devise'
 gem 'omniauth-twitter'
+
+#file upload
 gem 'carrierwave'
+
+# aws/cloud integration - still in use?
 gem 'fog', '~> 1.3'
+
+# image manipulation
 gem 'mini_magick', '~> 3.5.0'
+
+# search engine
 gem 'textacular', '~> 3.0', require: 'textacular/rails'
+
+# frontend
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'acts-as-taggable-on', github: 'rubymonsters/acts-as-taggable-on'
 gem 'auto_html', github: 'dejan/auto_html'
-gem 'mandrill-api'
 gem 'simple_form', '~> 2.0.0.rc'
 gem 'globalize', '~> 3.1.0'
+
+# email notifications
+gem 'mandrill-api'
 
 group :development do
   gem 'letter_opener'
@@ -47,6 +64,7 @@ end
 
 group :test do
   gem 'factory_girl_rails', '4.1.0'
+  # headless web-browser simulation that improves speed of cucumber runs
   gem 'poltergeist'
   gem 'database_cleaner', '~> 1.2.0'
 end
