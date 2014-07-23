@@ -22,3 +22,20 @@ module ApplicationHelper
     end
 
 end
+
+module FormattingHelper
+  VALID_PREFIX = /^(www\.|http(s|):\/\/)/
+
+  def url_with_protocol(url)
+    if url && !VALID_PREFIX.match(url) && !/(:|\/)/.match(url)
+      parts = url.split('.')
+      if parts.length == 3 && !/^ww/.match(url)
+        url = 'https://'+url
+      end
+      if parts.length == 2
+        url = 'https://www.'+url
+      end
+    end
+    return url
+  end
+end

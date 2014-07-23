@@ -27,13 +27,13 @@
     <div class="span5 text-profile">
       <% if @profile.twitter.present? %>
         <h5><%= t(:twitter, scope: "profiles.profile") %></h5>
-        <span><%=link_to "@" + @profile.twitter_name_formatted, @profile.twitter_link_formatted, target: '_blank' %></span>
+        <span><%=link_to "@" + @profile.twitter, @profile.twitter_link_formatted, target: '_blank' %></span>
         <hr>
       <% end %>
 
       <% if @profile.website.present? %>
         <h5><%= t(:website, scope: "profiles.profile") %></h5>
-        <span><%=link_to @profile.website, @profile.website_with_protocol, target: '_blank' %></span>
+        <span><%=link_to @profile.website, @profile.website, target: '_blank' %></span>
         <hr>
       <% end %>
 

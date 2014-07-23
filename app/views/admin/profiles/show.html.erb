@@ -34,7 +34,7 @@
         <hr>
 
         <h5><%= t(:website, scope: "profiles.profile") %></h5>
-        <span><%=link_to @profile.website,@profile.website_with_protocol, :target => '_blank' if @profile.website %></span>
+        <span><%=link_to @profile.website,@profile.website, :target => '_blank' if @profile.website %></span>
         <hr>
 
         <h5><%= t(:topics, scope: "profiles.profile") %></h5>

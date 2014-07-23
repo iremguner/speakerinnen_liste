@@ -1,17 +1,21 @@
+require 'application_helper'
+
 class Profile < ActiveRecord::Base
   include AutoHtml
+  include FormattingHelper
 
   translates :bio, :main_topic, fallbacks_for_empty_translations: true
   accepts_nested_attributes_for :translations
 
-  auto_html_for :media_url do
-    html_escape
-    image
-    youtube width: 400, height: 250
-    vimeo width: 400, height: 250
-    simple_format
-    link target: "_blank", rel: "nofollow"
-  end
+  # probably obsolete (moved to medialinks model)
+  #auto_html_for :media_url do
+  #  html_escape
+  #  image
+  #  youtube width: 400, height: 250
+  #  vimeo width: 400, height: 250
+  #  simple_format
+  #  link target: "_blank", rel: "nofollow"
+  #end
 
   devise :database_authenticatable, :registerable, :omniauthable,
     :recoverable, :rememberable, :trackable, :validatable, :confirmable
@@ -22,15 +26,20 @@ class Profile < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me
   attr_accessible :bio, :city, :firstname, :languages, :lastname
   attr_accessible :picture, :twitter, :remove_picture, :website
-  attr_accessible :topic_list, :medialinks, :main_topic
-  #attr_accessible :translations_attributes, :name, :content, :media_url, :talks
+  attr_accessible :topic_list, :medialinks, :main_topic, :translations_attributes
   attr_accessible :admin_comment
+  #probably obsolete attributes:
+  attr_accessible :name, :content, :media_url, :talks
+
 
   acts_as_taggable_on :topics
 
   has_many :medialinks
 
-  before_validation { twitter_name_formatted }
+  before_validation do
+    twitter_name_formatted
+    website_with_protocol
+  end
 
   def after_confirmation
     AdminMailer.new_profile_confirmed(self).deliver
@@ -44,6 +53,7 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  # method used by devise and omniauth
   def self.new_with_session(params, session)
     if session["devise.user_attributes"]
       new(session["devise.user_attributes"], without_protection: true) do |profile|
@@ -79,18 +89,6 @@ class Profile < ActiveRecord::Base
     end
   end
 
-  def website_with_protocol
-    if website =~ /^https?:\/\//
-      return website
-    else
-      return 'http://'+ website
-    end
-  end
-
-  def twitter_name_formatted
-    twitter.gsub!(/^@|https:|http:|:|\/\/|www.|twitter.com\//, '') if twitter
-  end
-
   def twitter_link_formatted
     "http://twitter.com/"  + twitter
   end
@@ -103,11 +101,22 @@ class Profile < ActiveRecord::Base
     super && provider.blank?
   end
 
+  # method used by devise
   def update_with_password(params, *options)
     if encrypted_password.blank?
       update_attributes(params, *options)
     else
       super
     end
+  end
+
+  private
+
+  def website_with_protocol
+    self.website = url_with_protocol(self.website)
+  end
+
+  def twitter_name_formatted
+    twitter.gsub!(/^@|https:|http:|:|\/\/|www.|twitter.com\//, '') if twitter
   end
 end
