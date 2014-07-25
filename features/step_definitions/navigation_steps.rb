@@ -100,19 +100,6 @@ Then /^you see admin action links: ((.+)(,.+)*)$/ do |match,unused,unused2|
   end
 end
 
-def comma_separated_string_to_array(string, separator=',', empty_string_marker='#empty')
-  strings_with_leading_spaces = string.split(separator)
-  array = []
-  strings_with_leading_spaces.each do |item|
-    if item == empty_string_marker
-      item = ''
-    end
-    array << item.strip
-  end
-
-  return array
-end
-
 Then /^you see (a table with columns|a form with labels|images|alert messages|notices): ((.+)(,.+)*)$/ do |type, match, unused, unused2|
   items = comma_separated_string_to_array(match)
   xpath = case type
